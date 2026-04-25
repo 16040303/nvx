@@ -47,6 +47,7 @@ interface CampaignIdeaItem {
   linkLabel?: string
 }
 
+// Các chiến dịch mẫu hiển thị sẵn khi chưa có nội dung do người dùng tạo.
 const CAMPAIGN_IDEAS: CampaignIdeaItem[] = [
   {
     id: 'idea-1',
@@ -74,6 +75,7 @@ const CAMPAIGN_IDEAS: CampaignIdeaItem[] = [
   },
 ]
 
+// Nội dung mẫu để tạo nhanh bản nháp chiến dịch.
 const GENERATED_GOALS = [
   'Tăng nhận diện chiến dịch trên các kênh truyền thông',
   'Thu hút khách hàng tiềm năng quan tâm đến sản phẩm',
@@ -130,9 +132,13 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
   const { t } = useLanguage()
   const router = useRouter()
   const pathname = usePathname()
+
+  // Quản lý nội dung người dùng nhập để AI sinh bài.
   const [ideaQuery, setIdeaQuery] = useState('')
   const [postQuantity, setPostQuantity] = useState('')
   const [isGeneratingPosts, setIsGeneratingPosts] = useState(false)
+
+  // Giữ carousel di chuyển mượt và không trượt quá danh sách.
   const carouselViewportRef = useRef<HTMLDivElement | null>(null)
   const carouselTrackRef = useRef<HTMLDivElement | null>(null)
   const transitionTimeoutRef = useRef<ReturnType<typeof window.setTimeout> | null>(null)
@@ -142,10 +148,14 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
   const [cardOffsets, setCardOffsets] = useState<number[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [maxIndex, setMaxIndex] = useState(0)
+
+  // Quản lý danh sách chiến dịch và media hiển thị trên các card.
   const [campaignCoverMediaMap, setCampaignCoverMediaMap] = useState<
     Record<string, CampaignCoverMedia>
   >({})
   const [campaignIdeas, setCampaignIdeas] = useState<CampaignIdeaItem[]>(CAMPAIGN_IDEAS)
+
+  // Quản lý link và file đính kèm trong thanh nhập ý tưởng.
   const [copiedLinkValue, setCopiedLinkValue] = useState('')
   const [isCopiedLinkVisible, setIsCopiedLinkVisible] = useState(false)
   const [isCampaignListVisible, setIsCampaignListVisible] = useState(false)
@@ -153,6 +163,7 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
   const toolbarFileInputRef = useRef<HTMLInputElement | null>(null)
   const campaignListRef = useRef<HTMLDivElement | null>(null)
 
+  // Dọn timeout để tránh trạng thái chờ hoặc animation bị treo.
   const clearTransitionTimeout = useCallback(() => {
     if (transitionTimeoutRef.current !== null) {
       window.clearTimeout(transitionTimeoutRef.current)
@@ -175,6 +186,7 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
     }, 560)
   }, [clearTransitionTimeout])
 
+  // Đo vị trí card để nút mũi tên cuộn đúng khoảng cách.
   const measureCarousel = useCallback(() => {
     const viewport = carouselViewportRef.current
     const track = carouselTrackRef.current
@@ -210,13 +222,13 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
     setCurrentIndex(clampedIndex)
   }, [clearTransitionTimeout])
 
-  // Restore state on mount
+  // Khôi phục dữ liệu nhập cũ và danh sách chiến dịch khi quay lại trang.
   useEffect(() => {
     const savedState = restoreCampaignListState()
     if (savedState) {
       setIdeaQuery(savedState.ideaQuery)
       setPostQuantity(savedState.postQuantity)
-      // Restore scroll after a frame to ensure DOM is ready
+      // Đợi giao diện sẵn sàng rồi mới khôi phục vị trí cuộn.
       restoreScrollPosition(savedState.scrollY)
     }
 
@@ -268,7 +280,7 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
     }
   }, [])
 
-  // Save state before navigating away
+  // Lưu dữ liệu đang nhập trước khi chuyển sang màn khác.
   const handleNavigateToStatus = () => {
     saveCampaignListState(ideaQuery, postQuantity)
     const statusBasePath = pathname.startsWith('/marketing/ads') ? '/marketing/ads/status' : '/marketing/status'
@@ -287,6 +299,7 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
     router.push(`${detailBasePath}/${campaignId}`)
   }
 
+  // Tạo bản nháp sau khi người dùng nhập đủ ý tưởng và số lượng.
   const handleGeneratePosts = () => {
     const normalizedIdea = ideaQuery.trim()
     const hasIdea = normalizedIdea.length > 0
@@ -366,6 +379,7 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
     }
   }, [clearTransitionTimeout, clearGenerateStatusTimeout])
 
+  // Điều khiển nút cuộn trái/phải của carousel.
   const moveCarouselBy = useCallback(
     (direction: 'prev' | 'next') => {
       if (cardOffsets.length === 0) {
@@ -411,6 +425,7 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
   const canScrollRight = currentIndex < maxIndex
   const currentTranslateX = cardOffsets[currentIndex] ?? 0
 
+  // Xử lý các thao tác trên thanh nhập ý tưởng.
   const handleToolbarLinkClick = useCallback(() => {
     setCopiedLinkValue('')
     setIsCopiedLinkVisible(true)
@@ -446,6 +461,7 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
 
   return (
     <div className="space-y-7 pb-2">
+      {/* Tiêu đề chính */}
       <section className="mx-auto max-w-[720px] pt-1 text-center">
         <h1 className="text-balance text-[40px] font-bold leading-[1.08] tracking-[-0.03em] text-[#2f6fed] md:text-[46px]">
           AI hỗ trợ tạo bài viết từ dữ liệu
@@ -460,6 +476,7 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
         </div>
       </section>
 
+      {/* Thanh nhập ý tưởng để AI sinh bài */}
       <section className="mx-auto w-full max-w-[920px]">
         <div className="rounded-[22px] border border-[#95bdfa] bg-gradient-to-b from-[#d8e8ff] to-[#cde1ff] p-[6px] shadow-[0_10px_24px_rgba(47,111,237,0.22)]">
           <div className="flex flex-wrap items-center gap-2 rounded-[18px] border border-white/70 bg-[#d4e6ff] px-2 py-2">
@@ -595,6 +612,7 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
         </div>
       </section>
 
+      {/* Trạng thái tạm thời khi hệ thống đang tạo bản nháp */}
       {isGeneratingPosts && (
         <div className="-mt-1 flex justify-center px-1">
           <div className="inline-flex items-center gap-2 text-[20px] font-medium leading-none text-[#2f6fed]">
@@ -609,6 +627,7 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
         </div>
       )}
 
+      {/* Nút tạo chiến dịch mới và xem trạng thái tạo bài */}
       <section className="flex items-center gap-3 px-1">
         <p className="text-[24px] font-semibold leading-none text-[#2f6fed]">AI gợi ý bài viết</p>
         <button
@@ -635,6 +654,7 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
         </button>
       </section>
 
+      {/* Danh sách chiến dịch gợi ý có thể cuộn ngang */}
       <section className="relative">
         {filteredIdeas.length === 0 ? (
           <div className="rounded-2xl bg-white px-6 py-12 text-center text-sm text-[#6b7280]">

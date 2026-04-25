@@ -59,9 +59,11 @@ interface ChannelsContextValue {
   isPlatformConnected: (platformId: PlatformId) => boolean
 }
 
+// Khóa lưu số lượng kênh đã kết nối trong sessionStorage.
 export const CHANNELS_STORAGE_KEY = 'nvx-connected-platforms'
 const DASHBOARD_CHANNELS_STORAGE_KEY = 'nvx-dashboard-channels'
 
+// Danh sách kết nối mặc định khi chưa có dữ liệu lưu tạm.
 const DEFAULT_CONNECTED: ConnectedPlatform[] = [
   {
     platformId: 'facebook',
@@ -85,6 +87,7 @@ const DEFAULT_CONNECTED: ConnectedPlatform[] = [
 
 const ChannelsContext = createContext<ChannelsContextValue | null>(null)
 
+// Đọc trạng thái kết nối từ sessionStorage hoặc dữ liệu dashboard.
 function loadFromStorage(): ConnectedPlatform[] {
   if (typeof window === 'undefined') return DEFAULT_CONNECTED
   try {
@@ -103,6 +106,7 @@ function loadFromStorage(): ConnectedPlatform[] {
   }
 }
 
+// Tính lại số kênh đang kết nối dựa trên dữ liệu dashboard.
 function deriveConnectedPlatformsFromDashboardStorage(): ConnectedPlatform[] {
   if (typeof window === 'undefined') return []
 
@@ -146,6 +150,7 @@ function deriveConnectedPlatformsFromDashboardStorage(): ConnectedPlatform[] {
   }
 }
 
+// Kiểm tra dữ liệu kênh trong dashboard có đủ thông tin cần dùng.
 function isStoredDashboardChannel(value: unknown): value is StoredDashboardChannel {
   if (!value || typeof value !== 'object') {
     return false
@@ -166,26 +171,32 @@ function isStoredDashboardChannel(value: unknown): value is StoredDashboardChann
   )
 }
 
+// Đổi id nền tảng dashboard sang id dùng ở màn kết nối kênh.
 function mapDashboardPlatformToConnectPlatform(platform: DashboardPlatformId): PlatformId {
   return platform === 'zaloOA' ? 'zalo-oa' : platform
 }
 
+// Chọn cách hiển thị số lượng kết nối theo từng nền tảng.
 function getLabelType(platformId: PlatformId): ConnectedLabelType {
   return platformId === 'shopee' ? 'shop' : platformId === 'tiktok' ? 'tài khoản' : 'trang'
 }
 
+// Lưu trạng thái kết nối mới nhất vào sessionStorage.
 function saveToStorage(platforms: ConnectedPlatform[]) {
   if (typeof window === 'undefined') return
   window.sessionStorage.setItem(CHANNELS_STORAGE_KEY, JSON.stringify(platforms))
 }
 
+// Provider chia sẻ trạng thái kết nối kênh cho toàn app.
 export function ChannelsProvider({ children }: { children: React.ReactNode }) {
   const [connectedPlatforms, setConnectedPlatforms] = useState<ConnectedPlatform[]>(DEFAULT_CONNECTED)
 
+  // Khôi phục dữ liệu kết nối sau khi app chạy trên trình duyệt.
   useEffect(() => {
     setConnectedPlatforms(loadFromStorage())
   }, [])
 
+  // Lấy số lượng đã kết nối của một nền tảng.
   const getConnectedCount = useCallback(
     (platformId: PlatformId): number => {
       const found = connectedPlatforms.find((p) => p.platformId === platformId)
@@ -194,6 +205,7 @@ export function ChannelsProvider({ children }: { children: React.ReactNode }) {
     [connectedPlatforms],
   )
 
+  // Lấy nhãn hiển thị phù hợp như trang, shop hoặc tài khoản.
   const getConnectedLabelType = useCallback(
     (platformId: PlatformId): ConnectedPlatform['labelType'] => {
       const found = connectedPlatforms.find((p) => p.platformId === platformId)
@@ -202,6 +214,7 @@ export function ChannelsProvider({ children }: { children: React.ReactNode }) {
     [connectedPlatforms],
   )
 
+  // Tăng số lượng kết nối sau khi người dùng kết nối thêm kênh.
   const incrementConnected = useCallback((platformId: PlatformId) => {
     setConnectedPlatforms((prev) => {
       const next = prev.map((p) =>
@@ -227,6 +240,7 @@ export function ChannelsProvider({ children }: { children: React.ReactNode }) {
     })
   }, [])
 
+  // Cập nhật số lượng kết nối khi đã có kết quả tính sẵn.
   const setConnectedCount = useCallback(
     (
       platformId: PlatformId,
@@ -250,6 +264,7 @@ export function ChannelsProvider({ children }: { children: React.ReactNode }) {
     [],
   )
 
+  // Giảm số lượng khi một kênh bị ngắt kết nối.
   const decrementConnected = useCallback((platformId: PlatformId) => {
     setConnectedPlatforms((prev) => {
       const next = prev
@@ -268,6 +283,7 @@ export function ChannelsProvider({ children }: { children: React.ReactNode }) {
     })
   }, [])
 
+  // Kiểm tra nền tảng đã có ít nhất một kết nối hay chưa.
   const isPlatformConnected = useCallback(
     (platformId: PlatformId): boolean => getConnectedCount(platformId) > 0,
     [getConnectedCount],
@@ -290,6 +306,7 @@ export function ChannelsProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
+// Hook giúp component đọc trạng thái kết nối kênh.
 export function useChannels() {
   const ctx = useContext(ChannelsContext)
   if (!ctx) {
@@ -298,16 +315,19 @@ export function useChannels() {
   return ctx
 }
 
+// Tạo mốc thời gian hiện tại theo định dạng dùng trong app.
 function formatNow(): string {
   const d = new Date()
   const pad = (v: number) => v.toString().padStart(2, '0')
   return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}, ${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
+// So sánh hai mốc thời gian để chọn lần cập nhật mới hơn.
 function compareTimestamps(a: string, b: string) {
   return parseTimestamp(a) - parseTimestamp(b)
 }
 
+// Chuyển thời gian dạng chữ thành số để so sánh.
 function parseTimestamp(value: string) {
   const matchedValue = value.match(/^(\d{2})\/(\d{2})\/(\d{4}),\s(\d{2}):(\d{2})$/)
 

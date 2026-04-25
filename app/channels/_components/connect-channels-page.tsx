@@ -10,6 +10,7 @@ import { CHANNEL_PLATFORM_GROUPS } from './channel-platform-data'
 import { useChannels, PlatformId } from '@/lib/channels-context'
 import { useToast } from '@/hooks/use-toast'
 
+// Các khóa lưu trạng thái kết nối kênh trong sessionStorage.
 const CONNECT_STORAGE_KEY = 'nvx-connected-platforms'
 const DASHBOARD_STORAGE_KEY = 'nvx-dashboard-channels'
 const NEW_CHANNEL_HIGHLIGHT_KEY = 'nvx-new-channel-highlight-id'
@@ -30,6 +31,7 @@ type DashboardChannel = {
   disconnectedAtUnix: number | null
 }
 
+// Danh sách kênh mặc định hiển thị trên dashboard.
 const DEFAULT_DASHBOARD_CHANNELS: DashboardChannel[] = [
   {
     id: 'c-1',
@@ -105,6 +107,7 @@ const DEFAULT_DASHBOARD_CHANNELS: DashboardChannel[] = [
   },
 ]
 
+// Các lựa chọn lọc nền tảng trên màn hình kết nối kênh.
 const PLATFORM_FILTERS = [
   { value: 'all', label: 'Tất cả nền tảng' },
   { value: 'social', label: 'Mạng xã hội' },
@@ -127,9 +130,12 @@ export function ConnectChannelsPage() {
   const router = useRouter()
   const { getConnectedCount, getConnectedLabelType, setConnectedCount } = useChannels()
   const { toast } = useToast()
+  // Theo dõi popup đăng nhập và nền tảng đang được kết nối.
   const popupRef = useRef<Window | null>(null)
   const popupMonitorRef = useRef<number | null>(null)
   const activePlatformRef = useRef<PlatformId | null>(null)
+
+  // Quản lý tìm kiếm, lọc và form tạo kênh sau khi đăng nhập thành công.
   const [searchQuery, setSearchQuery] = useState('')
   const [platformFilter, setPlatformFilter] = useState<(typeof PLATFORM_FILTERS)[number]['value']>('all')
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
@@ -139,6 +145,7 @@ export function ConnectChannelsPage() {
   const [createdDisplayName, setCreatedDisplayName] = useState('')
   const [isSyncPaused, setIsSyncPaused] = useState(false)
 
+  // Dừng việc kiểm tra popup khi popup đã đóng hoặc kết nối đã hoàn tất.
   const stopPopupMonitor = useCallback(() => {
     if (popupMonitorRef.current !== null) {
       window.clearInterval(popupMonitorRef.current)
@@ -146,6 +153,7 @@ export function ConnectChannelsPage() {
     }
   }, [])
 
+  // Giữ các hàm luôn cập nhật để xử lý sự kiện từ popup.
   const toastRef = useRef(toast)
   const getConnectedCountRef = useRef(getConnectedCount)
   const setConnectedCountRef = useRef(setConnectedCount)
@@ -158,6 +166,7 @@ export function ConnectChannelsPage() {
     getConnectedLabelTypeRef.current = getConnectedLabelType
   }, [toast, getConnectedCount, setConnectedCount, getConnectedLabelType])
 
+  // Cập nhật danh sách khi popup thay đổi dữ liệu lưu tạm.
   useEffect(() => {
     let lastStorageValue = sessionStorage.getItem(CONNECT_STORAGE_KEY) ?? ''
 
@@ -174,6 +183,7 @@ export function ConnectChannelsPage() {
     return () => window.removeEventListener('storage', handleStorageChange)
   }, [])
 
+  // Nhận kết quả đăng nhập từ popup và mở form thiết lập kênh.
   useEffect(() => {
     const handleMessage = (event: MessageEvent<ChannelConnectedMessage>) => {
       if (event.origin !== window.location.origin) {
@@ -222,6 +232,7 @@ export function ConnectChannelsPage() {
     }
   }, [stopPopupMonitor])
 
+  // Lọc nhóm nền tảng theo ô tìm kiếm và bộ lọc đang chọn.
   const filteredGroups = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase()
 
@@ -244,6 +255,7 @@ export function ConnectChannelsPage() {
     })).filter((group) => group.items.length > 0)
   }, [platformFilter, searchQuery])
 
+  // Mở popup đăng nhập tương ứng với nền tảng người dùng chọn.
   const handleOpenPlatformLogin = (platform: {
     id: string
     name: string
@@ -317,6 +329,7 @@ export function ConnectChannelsPage() {
     }, 500)
   }
 
+  // Lưu kênh mới sau khi người dùng đặt tên hiển thị.
   const handleCreateChannelSubmit = () => {
     const originalName = createdChannelName.trim()
     const displayName = createdDisplayName.trim()
@@ -366,6 +379,7 @@ export function ConnectChannelsPage() {
   return (
     <main className="flex-1 overflow-y-auto p-4 md:px-6 md:py-4 lg:px-8 lg:py-4">
       <div className="mx-auto w-full max-w-[1200px]">
+        {/* Bộ lọc và danh sách nền tảng có thể kết nối */}
         <section className="rounded-[24px] border border-[#d6d7da] bg-white p-5 shadow-[0_8px_30px_rgba(15,23,42,0.04)] md:p-8">
           <div className="mb-8 flex flex-wrap items-center gap-3">
             <div className="relative w-full max-w-[454px] flex-1">
@@ -469,6 +483,7 @@ export function ConnectChannelsPage() {
         </section>
       </div>
 
+      {/* Form đặt tên kênh sau khi kết nối tài khoản thành công */}
       <Dialog
         modal={false}
         open={isCreateDialogOpen}
@@ -569,6 +584,7 @@ export function ConnectChannelsPage() {
   )
 }
 
+// Tìm tên hiển thị của nền tảng từ dữ liệu cấu hình.
 function getPlatformName(platformId: PlatformId) {
   for (const group of CHANNEL_PLATFORM_GROUPS) {
     const platform = group.items.find((item) => item.id === platformId)
@@ -586,6 +602,7 @@ function hasValidOriginalChannelName(name: string) {
   return trimmedName === 'Robot AI nhà NuverxAI' || /^NuverxAI\s-\s.+$/u.test(trimmedName)
 }
 
+// Đọc danh sách kênh đã lưu để hiển thị ở dashboard.
 function getStoredDashboardChannels(): DashboardChannel[] {
   if (typeof window === 'undefined') {
     return []
@@ -618,6 +635,7 @@ function getStoredDashboardChannels(): DashboardChannel[] {
   }
 }
 
+// Lưu lại danh sách kênh vào sessionStorage.
 function persistDashboardChannels(channels: DashboardChannel[]) {
   if (typeof window === 'undefined') {
     return
@@ -626,6 +644,7 @@ function persistDashboardChannels(channels: DashboardChannel[]) {
   window.sessionStorage.setItem(DASHBOARD_STORAGE_KEY, JSON.stringify(channels))
 }
 
+// Kiểm tra dữ liệu kênh có đúng cấu trúc trước khi dùng.
 function isDashboardChannel(value: unknown): value is DashboardChannel {
   if (!value || typeof value !== 'object') {
     return false
@@ -653,6 +672,7 @@ function isDashboardChannel(value: unknown): value is DashboardChannel {
   )
 }
 
+// Đổi id nền tảng ở màn kết nối sang id dùng trong dashboard.
 function mapPlatformIdToDashboardPlatform(platformId: PlatformId): DashboardPlatformId | null {
   switch (platformId) {
     case 'facebook':
@@ -670,6 +690,7 @@ function mapPlatformIdToDashboardPlatform(platformId: PlatformId): DashboardPlat
   }
 }
 
+// Tạo bản ghi kênh mới và tính lại số kênh đang kết nối.
 function persistCreatedDashboardChannel({
   platformId,
   originalName,
@@ -719,6 +740,7 @@ function persistCreatedDashboardChannel({
   }
 }
 
+// Tạo tên gốc mặc định theo nền tảng vừa kết nối.
 function getOriginalNameLabel(platformId: PlatformId) {
   switch (platformId) {
     case 'facebook':
@@ -736,6 +758,7 @@ function getOriginalNameLabel(platformId: PlatformId) {
   }
 }
 
+// Tạo tên hiển thị mặc định để người dùng có thể sửa lại.
 function getDefaultDisplayName(platformId: PlatformId) {
   switch (platformId) {
     case 'facebook':
@@ -753,6 +776,7 @@ function getDefaultDisplayName(platformId: PlatformId) {
   }
 }
 
+// Định dạng thời gian theo dạng ngày/tháng/năm, giờ:phút.
 function formatTimestamp(date: Date) {
   const pad = (value: number) => value.toString().padStart(2, '0')
 

@@ -20,15 +20,19 @@ interface ProfileContextValue {
   updateProfile: (nextProfile: StoredProfile) => void
 }
 
+// Context lưu thông tin hồ sơ người dùng để các màn hình dùng chung.
 const ProfileContext = createContext<ProfileContextValue | undefined>(undefined)
 
+// Provider khôi phục hồ sơ đã lưu và cung cấp hàm cập nhật hồ sơ.
 export function ProfileProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<StoredProfile>(DEFAULT_PROFILE)
 
+  // Đọc hồ sơ từ nơi lưu tạm sau khi app chạy trên trình duyệt.
   useEffect(() => {
     setProfile(getStoredProfile())
   }, [])
 
+  // Gom dữ liệu hồ sơ và hàm cập nhật để truyền xuống các component con.
   const value = useMemo<ProfileContextValue>(
     () => ({
       profile,
@@ -43,6 +47,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   return <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>
 }
 
+// Hook giúp component đọc và cập nhật hồ sơ người dùng.
 export function useProfile() {
   const context = useContext(ProfileContext)
 

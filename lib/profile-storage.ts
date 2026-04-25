@@ -12,8 +12,10 @@ export interface StoredProfile {
   avatarDataUrl: string | null
 }
 
+// Khóa lưu hồ sơ người dùng trong sessionStorage.
 export const PROFILE_STORAGE_KEY = 'nvx-user-profile'
 
+// Hồ sơ mặc định dùng khi chưa có dữ liệu đã lưu.
 export const DEFAULT_PROFILE: StoredProfile = {
   fullName: 'Phạm Thanh Thanh',
   email: 'thanh12@nuverxai.com',
@@ -28,10 +30,12 @@ export const DEFAULT_PROFILE: StoredProfile = {
   avatarDataUrl: null,
 }
 
+// Kiểm tra có thể dùng sessionStorage trên trình duyệt hay không.
 function canUseStorage() {
   return typeof window !== 'undefined' && !!window.sessionStorage
 }
 
+// Kiểm tra dữ liệu đọc được có đúng cấu trúc hồ sơ hay không.
 function isStoredProfile(value: unknown): value is StoredProfile {
   if (!value || typeof value !== 'object') return false
   const profile = value as Record<string, unknown>
@@ -51,6 +55,7 @@ function isStoredProfile(value: unknown): value is StoredProfile {
   )
 }
 
+// Đọc hồ sơ đã lưu, nếu không hợp lệ thì dùng hồ sơ mặc định.
 export function getStoredProfile(): StoredProfile {
   if (!canUseStorage()) return DEFAULT_PROFILE
 
@@ -65,6 +70,7 @@ export function getStoredProfile(): StoredProfile {
   }
 }
 
+// Lưu hồ sơ mới để các màn hình khác có thể dùng lại.
 export function persistStoredProfile(profile: StoredProfile) {
   if (!canUseStorage()) return
   window.sessionStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile))

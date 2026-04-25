@@ -25,6 +25,7 @@ export interface CampaignStatus {
   type?: 'campaign' | 'ad'
 }
 
+// Chuyển thời gian lên lịch dạng chữ thành Date để so sánh với hiện tại.
 function parseCampaignScheduledAt(value?: string): Date | null {
   if (!value) {
     return null
@@ -50,6 +51,7 @@ function parseCampaignScheduledAt(value?: string): Date | null {
   return Number.isNaN(parsedDate.getTime()) ? null : parsedDate
 }
 
+// Tự đánh dấu đã đăng khi chiến dịch tới giờ hẹn.
 function normalizeScheduledCampaignStatus(campaign: CampaignStatus): CampaignStatus {
   if (campaign.status !== 'Đã duyệt/Lên lịch') {
     return campaign
@@ -69,6 +71,7 @@ function normalizeScheduledCampaignStatus(campaign: CampaignStatus): CampaignSta
   }
 }
 
+// Nội dung chi tiết mặc định của các chiến dịch mẫu.
 export const CAMPAIGN_DETAILS: Record<string, CampaignDetail> = {
   'idea-1': {
     id: 'idea-1',
@@ -303,6 +306,7 @@ Nhận tư vấn ngay để chọn gói triển khai phù hợp.`,
   },
 }
 
+// Trạng thái mặc định dùng cho màn theo dõi chiến dịch.
 export const CAMPAIGN_STATUSES: CampaignStatus[] = [
   {
     id: 'idea-1',
@@ -368,19 +372,20 @@ export const CAMPAIGN_STATUSES: CampaignStatus[] = [
   },
 ]
 
+// Khóa lưu toàn bộ thay đổi chiến dịch trong sessionStorage.
 const CAMPAIGN_STORE_STORAGE_KEY = 'marketing:campaign-store'
 
-// Session-based state for tracking archived campaigns
+// Theo dõi chiến dịch đã ẩn/xóa trong phiên làm việc hiện tại.
 const archivedCampaigns = new Set<string>()
 const deletedCampaigns = new Set<string>()
 
-// Dynamic campaign store for user-created campaigns and edited sample records
+// Lưu chiến dịch do người dùng tạo và các bản mẫu đã được chỉnh sửa.
 const userCreatedCampaigns: CampaignDetail[] = []
 const userCreatedStatuses: CampaignStatus[] = []
 const editedCampaignIds = new Set<string>()
 const editedStatusIds = new Set<string>()
 
-let campaignIdCounter = 100 // Start from 100 to avoid conflicts with mock data
+let campaignIdCounter = 100 // Bắt đầu từ 100 để tránh trùng id với dữ liệu mẫu
 let hasHydratedCampaignStore = false
 
 interface PersistedCampaignStore {
@@ -419,10 +424,12 @@ export interface UpdateCampaignInput {
   linkLabel?: string
 }
 
+// Kiểm tra có thể dùng sessionStorage hay không.
 function canUseCampaignStorage() {
   return typeof window !== 'undefined' && !!window.sessionStorage
 }
 
+// Lưu lại toàn bộ thay đổi campaign vào sessionStorage.
 function persistCampaignStore() {
   if (!canUseCampaignStorage()) {
     return
@@ -443,6 +450,7 @@ function persistCampaignStore() {
   window.sessionStorage.setItem(CAMPAIGN_STORE_STORAGE_KEY, JSON.stringify(persistedStore))
 }
 
+// Khôi phục chiến dịch đã tạo/chỉnh sửa/xóa khi trang được mở lại.
 function hydrateCampaignStoreFromStorage() {
   if (hasHydratedCampaignStore) {
     return
@@ -546,10 +554,11 @@ function hydrateCampaignStoreFromStorage() {
       delete CAMPAIGN_DETAILS[campaignId]
     })
   } catch {
-    // Ignore invalid storage payloads and continue with in-memory defaults.
+    // Bỏ qua dữ liệu lưu tạm bị lỗi và dùng dữ liệu mặc định.
   }
 }
 
+// Cập nhật một item trong danh sách trạng thái nếu tìm thấy id tương ứng.
 function updateStatusCollectionEntry(
   campaignStatuses: CampaignStatus[],
   campaignId: string,
@@ -569,13 +578,16 @@ function updateStatusCollectionEntry(
   return true
 }
 
+// Khởi tạo dữ liệu lưu tạm trước khi các hàm bên dưới được dùng.
 hydrateCampaignStoreFromStorage()
 
+// Kiểm tra chiến dịch đã bị xóa hay chưa.
 export function isCampaignDeleted(campaignId: string): boolean {
   hydrateCampaignStoreFromStorage()
   return deletedCampaigns.has(campaignId)
 }
 
+// Xóa chiến dịch khỏi danh sách hiển thị và dữ liệu chi tiết.
 export function deleteCampaign(campaignId: string) {
   hydrateCampaignStoreFromStorage()
 
@@ -597,6 +609,7 @@ export function deleteCampaign(campaignId: string) {
   persistCampaignStore()
 }
 
+// Ẩn chiến dịch khỏi danh sách chính nhưng vẫn giữ dữ liệu.
 export function archiveCampaign(campaignId: string) {
   hydrateCampaignStoreFromStorage()
 
@@ -608,11 +621,13 @@ export function archiveCampaign(campaignId: string) {
   persistCampaignStore()
 }
 
+// Kiểm tra chiến dịch có đang bị ẩn hay không.
 export function isArchived(campaignId: string): boolean {
   hydrateCampaignStoreFromStorage()
   return !deletedCampaigns.has(campaignId) && archivedCampaigns.has(campaignId)
 }
 
+// Đổi chiến dịch đã ẩn về trạng thái đề xuất khi cần hiển thị lại.
 export function getArchivedStatusForCampaigns(campaigns: CampaignStatus[]): CampaignStatus[] {
   hydrateCampaignStoreFromStorage()
   return campaigns
@@ -624,6 +639,7 @@ export function getArchivedStatusForCampaigns(campaigns: CampaignStatus[]): Camp
     )
 }
 
+// Tạo chiến dịch mới từ form hoặc từ AI sinh bài.
 export function createCampaign(input: CreateCampaignInput): string {
   hydrateCampaignStoreFromStorage()
 
@@ -637,7 +653,7 @@ export function createCampaign(input: CreateCampaignInput): string {
   const now = new Date()
   const createdAt = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`
 
-  // Create detail entry
+  // Tạo dữ liệu chi tiết cho trang xem/sửa campaign.
   const newDetail: CampaignDetail = {
     id,
     title: input.title,
@@ -654,7 +670,7 @@ export function createCampaign(input: CreateCampaignInput): string {
     linkLabel: input.linkLabel,
   }
 
-  // Create status entry
+  // Tạo trạng thái để hiển thị ở màn theo dõi.
   const newStatus: CampaignStatus = {
     id,
     title: input.title,
@@ -665,11 +681,11 @@ export function createCampaign(input: CreateCampaignInput): string {
     type: input.type || 'campaign',
   }
 
-  // Add to dynamic store at the beginning (newest first)
+  // Đưa chiến dịch mới lên đầu danh sách để người dùng thấy ngay.
   userCreatedCampaigns.unshift(newDetail)
   userCreatedStatuses.unshift(newStatus)
 
-  // Also add to the static store for detail page access
+  // Thêm vào kho chi tiết để trang detail đọc được ngay.
   CAMPAIGN_DETAILS[id] = newDetail
 
   persistCampaignStore()
@@ -677,6 +693,7 @@ export function createCampaign(input: CreateCampaignInput): string {
   return id
 }
 
+// Cập nhật nội dung và trạng thái của chiến dịch hiện có.
 export function updateCampaign(campaignId: string, input: UpdateCampaignInput) {
   hydrateCampaignStoreFromStorage()
 
@@ -757,6 +774,7 @@ export function updateCampaign(campaignId: string, input: UpdateCampaignInput) {
   persistCampaignStore()
 }
 
+// Lấy trạng thái mới nhất của một chiến dịch.
 export function getCampaignStatusById(campaignId: string): CampaignStatus | undefined {
   hydrateCampaignStoreFromStorage()
 
@@ -771,11 +789,13 @@ export function getCampaignStatusById(campaignId: string): CampaignStatus | unde
   return matchedCampaign ? normalizeScheduledCampaignStatus(matchedCampaign) : undefined
 }
 
+// Lấy danh sách chiến dịch do người dùng tạo.
 export function getUserCreatedCampaigns(): CampaignDetail[] {
   hydrateCampaignStoreFromStorage()
   return userCreatedCampaigns.filter((campaign) => !deletedCampaigns.has(campaign.id))
 }
 
+// Lấy trạng thái của các chiến dịch do người dùng tạo.
 export function getUserCreatedStatuses(): CampaignStatus[] {
   hydrateCampaignStoreFromStorage()
   return userCreatedStatuses
@@ -783,15 +803,17 @@ export function getUserCreatedStatuses(): CampaignStatus[] {
     .map(normalizeScheduledCampaignStatus)
 }
 
+// Lấy toàn bộ trạng thái chiến dịch, ưu tiên chiến dịch mới tạo trước.
 export function getAllCampaignStatuses(): CampaignStatus[] {
   hydrateCampaignStoreFromStorage()
 
-  // Return user-created first, then original mock data
+  // Chiến dịch người dùng tạo đứng trước, sau đó tới dữ liệu mẫu.
   return [...userCreatedStatuses, ...CAMPAIGN_STATUSES]
     .filter((campaign) => !deletedCampaigns.has(campaign.id))
     .map(normalizeScheduledCampaignStatus)
 }
 
+// Lọc trạng thái theo loại: marketing thường hoặc quảng cáo.
 export function getCampaignStatusesByType(type: 'campaign' | 'ad'): CampaignStatus[] {
   return getAllCampaignStatuses().filter((campaign) => (campaign.type || 'campaign') === type)
 }

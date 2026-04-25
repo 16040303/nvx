@@ -9,11 +9,14 @@ interface LanguageContextType {
   t: TranslationKeys
 }
 
+// Context lưu ngôn ngữ hiện tại và bộ text tương ứng.
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
+// Provider cho phép toàn app đổi giữa các ngôn ngữ đang hỗ trợ.
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>('vi')
 
+  // Chọn bộ text theo ngôn ngữ hiện tại.
   const t = translations[language]
 
   return (
@@ -23,6 +26,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   )
 }
 
+// Hook giúp component đọc ngôn ngữ hiện tại và text cần hiển thị.
 export function useLanguage() {
   const context = useContext(LanguageContext)
   if (context === undefined) {

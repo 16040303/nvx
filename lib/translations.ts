@@ -1,6 +1,8 @@
 export type Language = 'vi' | 'en'
 
+// Toàn bộ text đa ngôn ngữ dùng chung trong app.
 export const translations = {
+  // Nhóm bản dịch tiếng Việt.
   vi: {
     // Header
     nav: {
@@ -57,7 +59,7 @@ export const translations = {
       submitButton: 'Đặt lại mật khẩu',
       successMessage: 'Mật khẩu đã được đặt lại thành công!',
     },
-    // Dashboard
+    // Text cho khu vực dashboard và các module sau khi đăng nhập.
     dashboard: {
       greeting: 'Hello',
       viewOnly: 'chỉ xem',
@@ -252,6 +254,7 @@ export const translations = {
       },
     },
   },
+  // Nhóm bản dịch tiếng Anh.
   en: {
     // Header
     nav: {
@@ -308,7 +311,7 @@ export const translations = {
       submitButton: 'Reset Password',
       successMessage: 'Password has been reset successfully!',
     },
-    // Dashboard
+    // Text cho khu vực dashboard và các module sau khi đăng nhập.
     dashboard: {
       greeting: 'Hello',
       viewOnly: 'view only',

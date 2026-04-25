@@ -5,14 +5,17 @@ export interface CampaignCoverMedia {
   fileSize: number
 }
 
+// Khóa lưu ảnh đại diện chiến dịch trong sessionStorage.
 const CAMPAIGN_MEDIA_STORAGE_KEY = 'marketing:campaign-cover-media'
 
 type CampaignCoverMediaMap = Record<string, CampaignCoverMedia>
 
+// Kiểm tra có thể dùng sessionStorage trên trình duyệt hay không.
 function canUseStorage() {
   return typeof window !== 'undefined' && !!window.sessionStorage
 }
 
+// Đọc danh sách ảnh đại diện chiến dịch đã lưu tạm.
 function readCampaignCoverMediaMap(): CampaignCoverMediaMap {
   if (!canUseStorage()) {
     return {}
@@ -37,6 +40,7 @@ function readCampaignCoverMediaMap(): CampaignCoverMediaMap {
   }
 }
 
+// Ghi lại danh sách ảnh đại diện chiến dịch vào nơi lưu tạm.
 function writeCampaignCoverMediaMap(mediaMap: CampaignCoverMediaMap) {
   if (!canUseStorage()) {
     return
@@ -45,6 +49,7 @@ function writeCampaignCoverMediaMap(mediaMap: CampaignCoverMediaMap) {
   window.sessionStorage.setItem(CAMPAIGN_MEDIA_STORAGE_KEY, JSON.stringify(mediaMap))
 }
 
+// Ảnh đại diện mặc định cho các chiến dịch mẫu.
 const DEFAULT_CAMPAIGN_COVER_MEDIA: CampaignCoverMediaMap = {
   'idea-1': {
     fileUrl: '/images/campaign-samples/campaign-ad-1.webp',
@@ -96,11 +101,13 @@ const DEFAULT_CAMPAIGN_COVER_MEDIA: CampaignCoverMediaMap = {
   },
 }
 
+// Lấy ảnh đại diện của một chiến dịch, ưu tiên ảnh người dùng đã chọn.
 export function getCampaignCoverMedia(campaignId: string): CampaignCoverMedia | null {
   const mediaMap = readCampaignCoverMediaMap()
   return mediaMap[campaignId] || DEFAULT_CAMPAIGN_COVER_MEDIA[campaignId] || null
 }
 
+// Lấy toàn bộ ảnh đại diện, gồm ảnh mặc định và ảnh đã lưu tạm.
 export function getAllCampaignCoverMedia(): CampaignCoverMediaMap {
   return {
     ...DEFAULT_CAMPAIGN_COVER_MEDIA,
@@ -108,12 +115,14 @@ export function getAllCampaignCoverMedia(): CampaignCoverMediaMap {
   }
 }
 
+// Lưu ảnh đại diện mới cho một chiến dịch.
 export function setCampaignCoverMedia(campaignId: string, media: CampaignCoverMedia) {
   const mediaMap = readCampaignCoverMediaMap()
   mediaMap[campaignId] = media
   writeCampaignCoverMediaMap(mediaMap)
 }
 
+// Xóa ảnh đại diện đã lưu tạm của một chiến dịch.
 export function removeCampaignCoverMedia(campaignId: string) {
   const mediaMap = readCampaignCoverMediaMap()
 
