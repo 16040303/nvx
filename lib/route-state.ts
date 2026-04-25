@@ -1,5 +1,4 @@
-// Route state persistence utility
-// Saves and restores page state (scroll position, filter values, input state) across navigation
+// Lưu tạm trạng thái trang để khi quay lại vẫn giữ vị trí cuộn, bộ lọc và ô nhập.
 
 export interface CampaignListState {
   pathname: string
@@ -14,7 +13,7 @@ export interface StatusListState {
   statusFilter: string
 }
 
-// Save campaign list state before navigation
+// Lưu trạng thái danh sách chiến dịch trước khi người dùng rời trang.
 export function saveCampaignListState(ideaQuery: string, postQuantity: string): void {
   if (typeof window === 'undefined') return
   
@@ -28,7 +27,7 @@ export function saveCampaignListState(ideaQuery: string, postQuantity: string): 
   sessionStorage.setItem('marketing:list-state', JSON.stringify(state))
 }
 
-// Restore campaign list state
+// Khôi phục trạng thái danh sách chiến dịch khi người dùng quay lại.
 export function restoreCampaignListState(): CampaignListState | null {
   if (typeof window === 'undefined') return null
   
@@ -36,7 +35,7 @@ export function restoreCampaignListState(): CampaignListState | null {
   return stored ? JSON.parse(stored) : null
 }
 
-// Save status list state before navigation
+// Lưu bộ lọc và vị trí cuộn của trang trạng thái trước khi chuyển trang.
 export function saveStatusListState(statusFilter: string): void {
   if (typeof window === 'undefined') return
   
@@ -49,7 +48,7 @@ export function saveStatusListState(statusFilter: string): void {
   sessionStorage.setItem('marketing:status-state', JSON.stringify(state))
 }
 
-// Restore status list state
+// Khôi phục trạng thái trang trạng thái khi người dùng quay lại.
 export function restoreStatusListState(): StatusListState | null {
   if (typeof window === 'undefined') return null
   
@@ -57,25 +56,25 @@ export function restoreStatusListState(): StatusListState | null {
   return stored ? JSON.parse(stored) : null
 }
 
-// Save last visited route for fallback navigation
+// Ghi nhớ trang marketing vừa xem để có đường quay lại phù hợp.
 export function saveLastRoute(pathname: string): void {
   if (typeof window === 'undefined') return
   
   sessionStorage.setItem('marketing:last-route', pathname)
 }
 
-// Get last visited route
+// Lấy lại trang marketing đã xem gần nhất.
 export function getLastRoute(): string | null {
   if (typeof window === 'undefined') return null
   
   return sessionStorage.getItem('marketing:last-route')
 }
 
-// Restore scroll position with a small delay to ensure DOM is ready
+// Khôi phục vị trí cuộn sau khi nội dung trang đã sẵn sàng.
 export function restoreScrollPosition(scrollY: number): void {
   if (typeof window === 'undefined' || scrollY === 0) return
   
-  // Use requestAnimationFrame to ensure scroll happens after paint
+  // Đợi trình duyệt vẽ xong rồi mới cuộn về vị trí cũ.
   requestAnimationFrame(() => {
     window.scrollTo(0, scrollY)
   })
