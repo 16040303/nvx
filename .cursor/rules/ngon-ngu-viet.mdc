@@ -1,0 +1,12 @@
+---
+description: Vietnamese only
+globs:
+alwaysApply: true
+---
+
+Always respond and work with me in Vietnamese.
+This rule has priority over other language preferences in this project.
+
+Luôn trả lời và làm việc với tôi bằng tiếng Việt.
+Rule này có ưu tiên cao hơn các rule ngôn ngữ khác trong project này.
+Chỉ dùng ngôn ngữ khác khi tôi yêu cầu rõ ràng.

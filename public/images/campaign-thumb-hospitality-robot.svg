@@ -1,0 +1,57 @@
+<svg width="640" height="360" viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Hospitality robot scene</title>
+  <desc id="desc">Service robots standing in a warm lobby-like space with polished floors and ambient lighting.</desc>
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4d3f38"/>
+      <stop offset="100%" stop-color="#2f2724"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#84614a"/>
+      <stop offset="100%" stop-color="#51392c"/>
+    </linearGradient>
+    <linearGradient id="robot" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffe6bf"/>
+      <stop offset="100%" stop-color="#f3b264"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#79b8ff" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <rect width="640" height="360" fill="url(#wall)"/>
+  <rect y="188" width="640" height="172" fill="url(#floor)"/>
+
+  <g opacity="0.18" fill="#f2cab0">
+    <rect x="42" y="34" width="126" height="104" rx="10"/>
+    <rect x="198" y="34" width="126" height="104" rx="10"/>
+    <rect x="354" y="34" width="126" height="104" rx="10"/>
+    <rect x="510" y="34" width="88" height="104" rx="10"/>
+  </g>
+
+  <g>
+    <ellipse cx="214" cy="150" rx="66" ry="52" fill="url(#robot)"/>
+    <rect x="176" y="188" width="76" height="126" rx="24" fill="#f2bc73"/>
+    <rect x="186" y="196" width="56" height="44" rx="8" fill="#264263"/>
+    <circle cx="198" cy="146" r="9" fill="#21426d"/>
+    <circle cx="230" cy="146" r="9" fill="#21426d"/>
+    <rect x="202" y="166" width="24" height="9" rx="4.5" fill="#88512c"/>
+  </g>
+
+  <g opacity="0.75">
+    <ellipse cx="370" cy="156" rx="52" ry="42" fill="#e8d4b2"/>
+    <rect x="340" y="188" width="60" height="112" rx="22" fill="#d9bf99"/>
+    <rect x="348" y="198" width="44" height="26" rx="6" fill="#3e4c63"/>
+    <circle cx="356" cy="154" r="6" fill="#30455f"/>
+    <circle cx="384" cy="154" r="6" fill="#30455f"/>
+  </g>
+
+  <g opacity="0.62">
+    <ellipse cx="492" cy="160" rx="44" ry="36" fill="#d8c7ac"/>
+    <rect x="468" y="188" width="50" height="98" rx="18" fill="#cdb48f"/>
+    <rect x="474" y="198" width="38" height="20" rx="5" fill="#49566d"/>
+  </g>
+
+  <path d="M0 278h640" stroke="#dba56e" stroke-width="2" opacity="0.4"/>
+  <circle cx="214" cy="224" r="22" fill="#6db3ff" filter="url(#glow)" opacity="0.82"/>
+</svg>
