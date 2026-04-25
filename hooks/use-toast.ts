@@ -5,6 +5,7 @@ import * as React from 'react'
 
 import type { ToastActionElement, ToastProps } from '@/components/ui/toast'
 
+// Giới hạn số toast hiển thị cùng lúc và thời gian giữ trước khi xóa hẳn.
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
 
@@ -46,6 +47,7 @@ interface State {
   toasts: ToasterToast[]
 }
 
+// Hàng đợi xóa toast sau khi toast được đóng khỏi giao diện.
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
 
 const addToRemoveQueue = (toastId: string) => {
@@ -64,6 +66,7 @@ const addToRemoveQueue = (toastId: string) => {
   toastTimeouts.set(toastId, timeout)
 }
 
+// Reducer quản lý các thao tác thêm, cập nhật, đóng và xóa toast.
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'ADD_TOAST':
@@ -119,10 +122,13 @@ export const reducer = (state: State, action: Action): State => {
   }
 }
 
+// Danh sách component đang theo dõi thay đổi của toast.
 const listeners: Array<(state: State) => void> = []
 
+// Trạng thái toast được giữ ngoài component để dùng chung trong app.
 let memoryState: State = { toasts: [] }
 
+// Gửi thay đổi toast tới reducer rồi báo lại cho các component đang lắng nghe.
 function dispatch(action: Action) {
   memoryState = reducer(memoryState, action)
   listeners.forEach((listener) => {
@@ -132,6 +138,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, 'id'>
 
+// Tạo toast mới và trả về hàm cập nhật hoặc đóng toast đó.
 function toast({ ...props }: Toast) {
   const id = genId()
 
@@ -161,6 +168,7 @@ function toast({ ...props }: Toast) {
   }
 }
 
+// Hook giúp component hiển thị toast và nhận trạng thái toast mới nhất.
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
 
