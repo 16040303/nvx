@@ -9,6 +9,7 @@ import { DatePickerModal } from '@/components/data-list/date-picker-modal'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Switch } from '@/components/ui/switch'
@@ -629,9 +630,13 @@ export function UserManagementPage() {
         <Dialog open={isDetailDialogOpen} onOpenChange={handleDetailDialogChange}>
           <DialogContent
             showCloseButton={false}
+            lockScroll={false}
             className="overflow-hidden rounded-[16px] border-0 p-0 shadow-[0_24px_70px_rgba(15,23,42,0.24)] sm:max-w-[500px]"
           >
             <DialogTitle className="sr-only">Cập nhật tài khoản</DialogTitle>
+            <DialogDescription className="sr-only">
+              Cập nhật thông tin và trạng thái tài khoản người dùng.
+            </DialogDescription>
             {selectedUser ? (
               <>
                 <div className="flex items-center justify-between bg-[#3f8cff] px-6 py-4">
@@ -739,9 +744,13 @@ export function UserManagementPage() {
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogContent
             showCloseButton={false}
+            lockScroll={false}
             className="overflow-hidden rounded-[16px] border-0 p-0 shadow-[0_24px_70px_rgba(15,23,42,0.24)] sm:max-w-[500px]"
           >
             <DialogTitle className="sr-only">Tạo tài khoản</DialogTitle>
+            <DialogDescription className="sr-only">
+              Nhập thông tin cần thiết để tạo tài khoản người dùng mới.
+            </DialogDescription>
             <div className="flex items-center justify-between bg-[#3f8cff] px-6 py-4">
               <h2 className="text-lg font-semibold text-white">Tạo tài khoản</h2>
               <button

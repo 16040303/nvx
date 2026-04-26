@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 
 interface DatePickerModalProps {
   open: boolean
@@ -87,6 +87,9 @@ export function DatePickerModal({ open, onClose, selectedDate, onConfirm }: Date
         className="w-[min(92vw,420px)] gap-0 rounded-[20px] border-0 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.15)]"
       >
         <DialogTitle className="text-xl font-semibold text-[#111827]">Chọn thời gian</DialogTitle>
+        <DialogDescription className="sr-only">
+          Chọn ngày để lọc dữ liệu theo thời gian.
+        </DialogDescription>
 
         {/* Month navigation */}
         <div className="mt-6 flex items-center justify-between">

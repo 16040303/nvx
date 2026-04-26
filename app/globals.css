@@ -137,9 +137,6 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  body[data-scroll-locked] {
-    margin-right: 0 !important;
-  }
 
   :where(button, a, input, select, textarea, summary, [role="button"]) {
     transition-property:

@@ -43,7 +43,7 @@ export default function LoginPage() {
               <div className="relative max-w-lg mx-auto lg:mx-0">
                 <div className="relative overflow-hidden rounded-2xl shadow-2xl">
                   <Image
-                    src="/images/login-staff.webp"
+                    src="/assets/login-staff.webp"
                     alt="Customer support representative"
                     width={640}
                     height={640}
@@ -52,7 +52,7 @@ export default function LoginPage() {
                   />
 
                   <Image
-                    src="/images/login-message.png"
+                    src="/assets/login-message.png"
                     alt="Customer support message preview"
                     width={280}
                     height={234}

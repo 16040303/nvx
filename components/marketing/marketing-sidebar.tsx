@@ -33,7 +33,7 @@ export function MarketingSidebar() {
       {/* Logo area */}
       <div className="flex flex-col items-center gap-2 border-b border-[#e5e7eb] px-6 py-8">
         <Image
-          src="/images/logo.jpg"
+          src="/assets/logo.jpg"
           alt="NuverxAI Logo"
           width={64}
           height={64}

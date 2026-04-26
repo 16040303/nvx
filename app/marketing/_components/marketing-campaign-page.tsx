@@ -52,25 +52,25 @@ const CAMPAIGN_IDEAS: CampaignIdeaItem[] = [
   {
     id: 'idea-1',
     title: 'Ra mắt sản phẩm Robot AI-Care (Người cao tuổi)',
-    imageSrc: '/images/campaign-thumb-child-robot.svg',
+    imageSrc: '/assets/campaign-thumb-child-robot.svg',
     imageAlt: 'Người dùng trải nghiệm Robot AI-Care',
   },
   {
     id: 'idea-3',
     title: 'Mua cho Ba Mẹ - Dùng dễ hơn cả TV',
-    imageSrc: '/images/campaign-thumb-elderly-product.svg',
+    imageSrc: '/assets/campaign-thumb-elderly-product.svg',
     imageAlt: 'Người lớn tuổi dùng thiết bị AI thân thiện',
   },
   {
     id: 'idea-4',
     title: 'Cai nghiện iPad - Để Robot AI làm bạn cùng bé',
-    imageSrc: '/images/campaign-thumb-child-robot.svg',
+    imageSrc: '/assets/campaign-thumb-child-robot.svg',
     imageAlt: 'Robot AI làm bạn cùng bé',
   },
   {
     id: 'idea-7',
     title: 'Ra mắt sản phẩm Robot AI-Care (Người cao tuổi)',
-    imageSrc: '/images/campaign-thumb-elderly-product.svg',
+    imageSrc: '/assets/campaign-thumb-elderly-product.svg',
     imageAlt: 'Robot AI-Care hỗ trợ người cao tuổi',
   },
 ]
@@ -141,8 +141,8 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
   // Giữ carousel di chuyển mượt và không trượt quá danh sách.
   const carouselViewportRef = useRef<HTMLDivElement | null>(null)
   const carouselTrackRef = useRef<HTMLDivElement | null>(null)
-  const transitionTimeoutRef = useRef<ReturnType<typeof window.setTimeout> | null>(null)
-  const generateStatusTimeoutRef = useRef<ReturnType<typeof window.setTimeout> | null>(null)
+  const transitionTimeoutRef = useRef<number | null>(null)
+  const generateStatusTimeoutRef = useRef<number | null>(null)
   const isAnimatingRef = useRef(false)
   const targetIndexRef = useRef(0)
   const [cardOffsets, setCardOffsets] = useState<number[]>([])
@@ -237,7 +237,7 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
       .map((campaign) => ({
         id: campaign.id,
         title: campaign.title,
-        imageSrc: '/images/campaign-thumb-elderly-product.svg',
+        imageSrc: '/assets/campaign-thumb-elderly-product.svg',
         imageAlt: campaign.title,
         isUserCreated: true,
         linkLabel: campaign.linkLabel,
@@ -252,7 +252,7 @@ export function MarketingCampaignPage({ showCampaignListButton = false }: Market
             return {
               id: campaign.id,
               title: adContent || campaign.title,
-              imageSrc: '/images/campaign-thumb-elderly-product.svg',
+              imageSrc: '/assets/campaign-thumb-elderly-product.svg',
               imageAlt: campaign.title,
             }
           })

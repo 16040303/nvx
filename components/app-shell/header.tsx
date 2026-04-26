@@ -19,7 +19,7 @@ interface AppHeaderProps {
 const NuverxLogo = () => (
   <div className="flex items-center gap-[10px]">
     <Image
-      src="/images/logo.jpg"
+      src="/assets/logo.jpg"
       alt="NuverxAI Logo"
       width={30}
       height={30}

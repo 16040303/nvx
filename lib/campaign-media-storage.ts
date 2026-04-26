@@ -52,49 +52,49 @@ function writeCampaignCoverMediaMap(mediaMap: CampaignCoverMediaMap) {
 // Ảnh đại diện mặc định cho các chiến dịch mẫu.
 const DEFAULT_CAMPAIGN_COVER_MEDIA: CampaignCoverMediaMap = {
   'idea-1': {
-    fileUrl: '/images/campaign-samples/campaign-ad-1.webp',
+    fileUrl: '/assets/campaign-samples/campaign-ad-1.webp',
     fileName: 'CHIẾN DỊCH_QUẢNG CÁO_ảnh 1.webp',
     fileType: 'image/webp',
     fileSize: 401294,
   },
   'idea-3': {
-    fileUrl: '/images/campaign-samples/campaign-ad-2.png',
+    fileUrl: '/assets/campaign-samples/campaign-ad-2.png',
     fileName: 'CHIẾN DỊCH_QUẢNG CÁO_ảnh 2.png',
     fileType: 'image/png',
     fileSize: 242546,
   },
   'idea-4': {
-    fileUrl: '/images/campaign-samples/campaign-view.jpg',
+    fileUrl: '/assets/campaign-samples/campaign-view.jpg',
     fileName: 'CHIẾN DỊCH_SAU KHI THÊM Ý TƯỞNG + XEM CHIẾN DỊCH.jpg',
     fileType: 'image/jpeg',
     fileSize: 396929,
   },
   'idea-7': {
-    fileUrl: '/images/campaign-samples/campaign-ad-3.webp',
+    fileUrl: '/assets/campaign-samples/campaign-ad-3.webp',
     fileName: 'CHIẾN DỊCH_QUẢNG CÁO_ảnh 3.webp',
     fileType: 'image/webp',
     fileSize: 70862,
   },
   'ad-idea-1': {
-    fileUrl: '/images/campaign-samples/campaign-ad-1.webp',
+    fileUrl: '/assets/campaign-samples/campaign-ad-1.webp',
     fileName: 'CHIẾN DỊCH_QUẢNG CÁO_ảnh 1.webp',
     fileType: 'image/webp',
     fileSize: 401294,
   },
   'ad-idea-3': {
-    fileUrl: '/images/campaign-samples/campaign-ad-2.png',
+    fileUrl: '/assets/campaign-samples/campaign-ad-2.png',
     fileName: 'CHIẾN DỊCH_QUẢNG CÁO_ảnh 2.png',
     fileType: 'image/png',
     fileSize: 242546,
   },
   'ad-idea-4': {
-    fileUrl: '/images/campaign-samples/campaign-view.jpg',
+    fileUrl: '/assets/campaign-samples/campaign-view.jpg',
     fileName: 'CHIẾN DỊCH_SAU KHI THÊM Ý TƯỞNG + XEM CHIẾN DỊCH.jpg',
     fileType: 'image/jpeg',
     fileSize: 396929,
   },
   'ad-idea-7': {
-    fileUrl: '/images/campaign-samples/campaign-ad-3.webp',
+    fileUrl: '/assets/campaign-samples/campaign-ad-3.webp',
     fileName: 'CHIẾN DỊCH_QUẢNG CÁO_ảnh 3.webp',
     fileType: 'image/webp',
     fileSize: 70862,

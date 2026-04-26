@@ -121,26 +121,32 @@ export function CSKHTab({ timeRange }: CSKHTabProps) {
                   axisLine={{ stroke: '#E5E7EB' }}
                   domain={[100, 180]}
                 />
-                {showAiProcessed && (
-                  <Line
-                    type="monotone"
-                    dataKey="ai"
-                    stroke="#3B82F6"
-                    strokeWidth={2}
-                    dot={{ fill: '#3B82F6', strokeWidth: 2 }}
-                    name={t.dashboard.cskh.aiProcessed}
-                  />
-                )}
-                {showAgentProcessed && (
-                  <Line
-                    type="monotone"
-                    dataKey="agent"
-                    stroke="#22C55E"
-                    strokeWidth={2}
-                    dot={{ fill: '#22C55E', strokeWidth: 2 }}
-                    name={t.dashboard.cskh.agentProcessed}
-                  />
-                )}
+                <Line
+                  type="monotone"
+                  dataKey="ai"
+                  stroke="#3B82F6"
+                  strokeWidth={2}
+                  dot={{ fill: '#3B82F6', strokeWidth: 2, opacity: showAiProcessed ? 1 : 0 }}
+                  activeDot={showAiProcessed ? undefined : false}
+                  name={t.dashboard.cskh.aiProcessed}
+                  opacity={showAiProcessed ? 1 : 0}
+                  isAnimationActive
+                  animationDuration={650}
+                  animationEasing="ease-in-out"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="agent"
+                  stroke="#22C55E"
+                  strokeWidth={2}
+                  dot={{ fill: '#22C55E', strokeWidth: 2, opacity: showAgentProcessed ? 1 : 0 }}
+                  activeDot={showAgentProcessed ? undefined : false}
+                  name={t.dashboard.cskh.agentProcessed}
+                  opacity={showAgentProcessed ? 1 : 0}
+                  isAnimationActive
+                  animationDuration={650}
+                  animationEasing="ease-in-out"
+                />
               </LineChart>
             </ResponsiveContainer>
           </div>

@@ -6,7 +6,7 @@ export function NuverxLogo({ className = '' }: { className?: string }) {
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <Image
-        src="/images/logo.jpg"
+        src="/assets/logo.jpg"
         alt="NuverxAI Logo"
         width={40}
         height={40}

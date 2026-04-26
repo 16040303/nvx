@@ -12,7 +12,6 @@ import {
   Share2,
   User,
   Settings,
-  LogOut,
 } from 'lucide-react'
 
 interface SidebarItemProps {
@@ -63,12 +62,12 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="h-[calc(100vh-56px)] w-[300px] flex-shrink-0 px-[18px] pb-[10px] pt-[10px]">
+    <aside className="h-screen w-[300px] flex-shrink-0 px-[18px] pb-[10px] pt-[10px]">
       <div className="flex h-full flex-col overflow-hidden rounded-[22px] border border-[#e8edf5] bg-white shadow-[0_1px_0_rgba(15,23,42,0.03),0_12px_30px_rgba(174,190,214,0.16)]">
         <div className="flex flex-col items-center justify-center gap-2 border-b border-[#e8edf5] px-5 py-[18px] text-center">
           <div className="flex h-[42px] w-[42px] items-center justify-center overflow-hidden rounded-full">
             <Image
-              src="/images/logo.jpg"
+              src="/assets/logo.jpg"
               alt="NuverxAI Logo"
               width={42}
               height={42}
@@ -116,9 +115,15 @@ export function Sidebar() {
 
           <button
             onClick={handleLogout}
-            className="mt-[18px] flex w-full items-center justify-center gap-2 rounded-[10px] px-4 py-[10px] text-[15px] font-medium text-[#7c8594] transition-[background-color,color,transform] duration-200 ease-out hover:bg-[#f5f8fc] hover:text-[#5a6472] hover:translate-y-[-1px]"
+            className="mt-[12px] flex w-full items-center justify-center gap-2 rounded-[10px] px-4 py-[6px] text-[18px] font-medium text-[#777777] transition-[background-color,color,transform] duration-200 ease-out hover:bg-[#f5f8fc] hover:text-[#5a6472] hover:translate-y-[-1px]"
           >
-            <LogOut className="h-4 w-4 stroke-[1.9]" />
+            <Image
+              src="/assets/out.ico"
+              alt=""
+              width={20}
+              height={20}
+              className="h-5 w-5 object-contain"
+            />
             <span>{t.dashboard.sidebar.logout}</span>
           </button>
         </div>

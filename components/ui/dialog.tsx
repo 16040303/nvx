@@ -50,13 +50,15 @@ function DialogContent({
   className,
   children,
   showCloseButton = true,
+  lockScroll = true,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
+  lockScroll?: boolean
 }) {
   return (
     <DialogPortal data-slot="dialog-portal">
-      <DialogOverlay />
+      {lockScroll ? <DialogOverlay /> : <div data-slot="dialog-overlay" className="fixed inset-0 z-50 bg-black/50" />}
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
